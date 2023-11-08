@@ -15,24 +15,25 @@ import java.sql.SQLOutput;
 
 public class GamePanel extends JPanel implements Runnable {
     private int ballX = 100, ballY = 100;
-    protected double xDir = 5.5, yDir = 5.5;
-    protected int ballWidth = 20;
-    protected int ballHeight = 20;
+    protected double xDir = 2.5, yDir = 2.5;
+    protected int ballWidth = 25;
+    protected int ballHeight = 25;
     private boolean movingRight = true;
     protected boolean enterKeyPressed = false;
     protected boolean isNyanCat = false;
-    private double player1Y = (GameWindow.HEIGHT / 2) - 25;
+    private double player1Y = (GameWindow.HEIGHT / 2) - 50;
     private int player1X = 10;
-    private int player2X = GameWindow.WIDTH - 30;
+    private int player2X = GameWindow.WIDTH - 45;
+    private int playersWidth = 20;
 
-    private double player2Y = (GameWindow.HEIGHT / 2) - 25;
+    private double player2Y = (GameWindow.HEIGHT / 2) - 50;
     private int buffer = 10;
     private int intervalBetweenSpeedIncrease = 5000;
     private int level = 1;
     protected boolean isGameOver = false;
     private int whoWon = 0;
-    private int player1Height = 80;
-    private int player2Height = 80;
+    private int player1Height = 100;
+    private int player2Height = 100;
     private final Image[] rightSpriteImages = new Image[5];
     private final Image[] leftSpriteImages = new Image[5];
     private final Image[] endGameSpriteImages = new Image[5];
@@ -127,20 +128,12 @@ public class GamePanel extends JPanel implements Runnable {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            if (xDir < 0) {
-                xDir -= 0.3;
-            } else {
-                xDir += 0.3;
-            }
-            if (yDir < 0) {
-                yDir -= 0.3;
-            } else {
-                yDir += 0.3;
-            }
+            xDir += 0.3 * Math.signum(xDir);
+            yDir += 0.3 * Math.signum(yDir);
             level++;
 
-            Game.p1speed += 0.2;
-            Game.p2speed += 0.2;
+            Game.p1speed += 0.3;
+            Game.p2speed += 0.3;
             System.out.println("LEVEL INCREASE-------");
             System.out.println(xDir + " " + yDir);
             System.out.println("player speed : " + Game.p1speed);
@@ -187,15 +180,15 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void displayElements(Graphics g) {
-        g.fillRect(player1X, (int) player1Y, 10, player1Height);
-        g.fillRect(player2X, (int) player2Y, 10, player2Height);
+        g.fillRect(player1X, (int) player1Y, playersWidth, player1Height);
+        g.fillRect(player2X, (int) player2Y, playersWidth, player2Height);
         if (!isNyanCat) {
             g.setColor(ballColor);
             g.fillRect(ballX, ballY, ballWidth, ballHeight);
         } else {
             if (movingRight)
-                //g.drawImage(endGameSpriteImages[indexToDraw], ballX, ballY, null);
-                g.drawImage(rightSpriteImages[indexToDraw], ballX, ballY, null);
+                g.drawImage(endGameSpriteImages[indexToDraw], ballX, ballY, null);
+                //g.drawImage(rightSpriteImages[indexToDraw], ballX, ballY, null);
             else
                 g.drawImage(leftSpriteImages[indexToDraw], ballX, ballY, null);
         }

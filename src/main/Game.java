@@ -9,12 +9,12 @@ public class Game implements Runnable {
     public static int score = 0;
     private final GamePanel gamePanel;
     private Thread gameLoop;
-    private int FPS_SET = 120;
-    protected static double p1speed = 2.5;
-    protected static double p2speed = 2.5;
+    private int FPS_SET = 160;
+    protected static double p1speed = 3;
+    protected static double p2speed = 3;
     private int nyanCatSpawnTimer = 800;
     private int nyanCatSpawnCounter = 0;
-    private int nyanCatTimer = 400;
+    private int nyanCatTimer = 600;
     private int nyanCatCounter = 0;
     private int levelTimer = 0;
     private int levelCounter = 0;
@@ -114,16 +114,10 @@ public class Game implements Runnable {
     private void setNyanCatDefenitions() {
         gamePanel.ballWidth = 115;
         gamePanel.ballHeight = 45;
-        if (gamePanel.xDir < 0) {
-            gamePanel.xDir -= 1.8;
-        } else {
-            gamePanel.xDir += 1.8;
-        }
-        if (gamePanel.yDir < 0) {
-            gamePanel.yDir -= 1.8;
-        } else {
-            gamePanel.yDir += 1.8;
-        }
+
+        gamePanel.xDir += 1.8 * Math.signum(gamePanel.xDir);
+        gamePanel.yDir += 1.8 * Math.signum(gamePanel.yDir);
+
         p1speed += 1.3;
         p2speed += 1.3;
         gamePanel.animationTimer--;
@@ -132,16 +126,10 @@ public class Game implements Runnable {
     private void setCubeDefenitions() {
         gamePanel.ballWidth = 20;
         gamePanel.ballHeight = 20;
-        if (gamePanel.xDir < 0) {
-            gamePanel.xDir += 1.8;
-        } else {
-            gamePanel.xDir -= 1.8;
-        }
-        if (gamePanel.yDir < 0) {
-            gamePanel.yDir += 1.8;
-        } else {
-            gamePanel.yDir -= 1.8;
-        }
+
+        gamePanel.xDir -= 1.8 * Math.signum(gamePanel.xDir);
+        gamePanel.yDir -= 1.8 * Math.signum(gamePanel.yDir);
+
         p1speed -= 1.3;
         p2speed -= 1.3;
     }
@@ -152,13 +140,13 @@ public class Game implements Runnable {
     }
 
     public void movePlayers() {
-        if (leftPlayerKeyDown && gamePanel.getPlayer1Y() + gamePanel.getPlayer1Height() < GameWindow.HEIGHT-50) {
+        if (leftPlayerKeyDown && gamePanel.getPlayer1Y() + gamePanel.getPlayer1Height() < GameWindow.HEIGHT - 50) {
             gamePanel.moveP1(p1speed);
         }
         if (leftPlayerKeyUp && gamePanel.getPlayer1Y() > 10) {
             gamePanel.moveP1(-p1speed);
         }
-        if (rightPlayerKeyDown && gamePanel.getPlayer2Y() + gamePanel.getPlayer2Height() < GameWindow.HEIGHT-50) {
+        if (rightPlayerKeyDown && gamePanel.getPlayer2Y() + gamePanel.getPlayer2Height() < GameWindow.HEIGHT - 50) {
             gamePanel.moveP2(p2speed);
         }
         if (rightPlayerKeyUp && gamePanel.getPlayer2Y() > 10) {

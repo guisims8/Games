@@ -23,10 +23,10 @@ public class KeyboardInputs implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_W -> Game.setLeftPlayerKeyUp(true);
-            case KeyEvent.VK_S -> Game.setLeftPlayerKeyDown(true);
-            case KeyEvent.VK_UP -> Game.setRightPlayerKeyUp(true);
-            case KeyEvent.VK_DOWN -> Game.setRightPlayerKeyDown(true);
+            case KeyEvent.VK_W -> gamePanel.getGame().getPlayer1().setKeyUp(true);
+            case KeyEvent.VK_S -> gamePanel.getGame().getPlayer1().setKeyDown(true);
+            case KeyEvent.VK_UP -> gamePanel.getGame().getPlayer2().setKeyUp(true);
+            case KeyEvent.VK_DOWN -> gamePanel.getGame().getPlayer2().setKeyDown(true);
             case KeyEvent.VK_ENTER -> gamePanel.setEnterKeyPressed(true);
         }
     }
@@ -34,10 +34,10 @@ public class KeyboardInputs implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_W -> Game.setLeftPlayerKeyUp(false);
-            case KeyEvent.VK_S -> Game.setLeftPlayerKeyDown(false);
-            case KeyEvent.VK_UP -> Game.setRightPlayerKeyUp(false);
-            case KeyEvent.VK_DOWN -> Game.setRightPlayerKeyDown(false);
+            case KeyEvent.VK_W -> gamePanel.getGame().getPlayer1().setKeyUp(false);
+            case KeyEvent.VK_S -> gamePanel.getGame().getPlayer1().setKeyDown(false);
+            case KeyEvent.VK_UP -> gamePanel.getGame().getPlayer2().setKeyUp(false);
+            case KeyEvent.VK_DOWN -> gamePanel.getGame().getPlayer2().setKeyDown(false);
         }
     }
 }

@@ -1,6 +1,6 @@
 package main;
 
-import Display.GameOverScreen;
+import display.GameOverScreen;
 import inputs.KeyboardInputs;
 import music.C4;
 import music.Music;

@@ -178,4 +178,8 @@ public class Game implements Runnable {
     public Player getPlayer2() {
         return player2;
     }
+
+    public Projectile getProjectile() {
+        return projectile;
+    }
 }

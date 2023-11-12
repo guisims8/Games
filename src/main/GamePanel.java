@@ -1,8 +1,9 @@
 package main;
 
-import display.BoardScreen;
-import display.GameOverScreen;
+import Display.GameOverScreen;
 import inputs.KeyboardInputs;
+import music.C4;
+import music.Music;
 import sprites.SpritePath;
 
 import javax.imageio.ImageIO;
@@ -13,8 +14,42 @@ import java.io.File;
 import java.io.IOException;
 
 public class GamePanel extends JPanel implements Runnable {
-    Game game;
+    private int ballX = 100, ballY = 100;
+    protected double xDir = 2, yDir = 2;
+    protected int ballWidth = 25;
+    protected int ballHeight = 25;
+    private boolean movingRight = true;
+    private Color ballColor = Color.WHITE;
+    private final Image[] rightSpriteImages = new Image[5];
+    private final Image[] leftSpriteImages = new Image[5];
+    private final Image[] endGameSpriteImages = new Image[5];
+    protected int indexToDraw, animationCounter = 0;
+    protected int animationTimer = 12;
 
+    protected boolean enterKeyPressed = false;
+    protected boolean isNyanCat = false;
+
+
+    private double player1Y = (GameWindow.HEIGHT / 2) - 50;
+    private int player1X = 10;
+    private int player2X = GameWindow.WIDTH - 45;
+    private int playersWidth = 20;
+    private int player1Height = 100;
+    private int player2Height = 100;
+    private double player2Y = (GameWindow.HEIGHT / 2) - 50;
+
+
+    private int buffer = 10;
+    private int intervalBetweenSpeedIncrease = 5000;
+    private int level = 1;
+    protected boolean isGameOver = false;
+    private int whoWon = 0;
+
+    Music pong;
+    Game game;
+    Music nyanMusic = new Music("resources/sounds/Nyan cat theme song (sped up).wav");
+    ;
+    private String[] pongSounds;
 
 
     public GamePanel(Game game) {
@@ -26,11 +61,11 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void startSpeedTimer() {
         //Thread speedIncreaseTimer = new Thread(this);
-        //pongSounds = C4.NOTES;
+        pongSounds = C4.NOTES;
         //pong = new Music(pongSounds[0]);
-        //pong = new Music(pongSounds[level]);
-        //pong.play();
-        //pong.kill();
+        pong = new Music(pongSounds[level]);
+        pong.play();
+        pong.kill();
         //speedIncreaseTimer.start();
 
     }
@@ -54,7 +89,20 @@ public class GamePanel extends JPanel implements Runnable {
 
 
     private void displayBoard(Graphics g) {
-        BoardScreen.Show(g,game);
+        g.setColor(Color.WHITE);
+        int value = 10;
+        while (value < GameWindow.HEIGHT) {
+            g.fillRect(GameWindow.WIDTH / 2, value, 10, 50);
+            value += 81;
+        }
+        Font font = new Font("Arial", Font.BOLD, 20);
+        g.setFont(font);
+        g.setColor(Color.WHITE);
+        g.drawString("Score : " + Game.score, 30, 30);
+        g.drawString("B speed : " + xDir, GameWindow.WIDTH - 140, 15);
+        g.drawString("P speed : " + game.getPlayer1().getYDir(), GameWindow.WIDTH - 140, 35);
+
+
     }
 
     private void displayElements(Graphics g) {
@@ -95,28 +143,15 @@ public class GamePanel extends JPanel implements Runnable {
 
 
 
-    protected boolean enterKeyPressed = false;
-    protected boolean isNyanCat = false;
 
-    private int ballX = 100, ballY = 100;
-    protected double xDir = 2, yDir = 2;
-    protected int ballWidth = 25;
-    protected int ballHeight = 25;
-    private boolean movingRight = true;
-    private Color ballColor = Color.WHITE;
-    private final Image[] rightSpriteImages = new Image[5];
-    private final Image[] leftSpriteImages = new Image[5];
-    private final Image[] endGameSpriteImages = new Image[5];
-    protected int indexToDraw, animationCounter = 0;
-    protected int animationTimer = 12;
 
     public void udpateProjectilePosition() {
         ballY += yDir;
         if (ballY + ballHeight + 40 > GameWindow.HEIGHT || ballY < 0) {
             yDir *= -1;
-       //     pong = new Music(pongSounds[level]);
-         //   pong.play();
-          //  pong.kill();
+            pong = new Music(pongSounds[level]);
+            pong.play();
+            pong.kill();
             ballColor = getRandomColor();
         }
         detectPlayerTouch();
@@ -136,9 +171,9 @@ public class GamePanel extends JPanel implements Runnable {
         Game.score++;
         ballColor = getRandomColor();
         this.movingRight = movingRight;
-    //    pong = new Music(pongSounds[level]);
-     //   pong.play();
-      //  pong.kill();
+        pong = new Music(pongSounds[level]);
+        pong.play();
+        pong.kill();
     }
     public void detectPlayerTouch() {
         ballX += xDir;
@@ -219,18 +254,4 @@ public class GamePanel extends JPanel implements Runnable {
             leftSpriteImages[i] = image;
         }
     }
-    private double player1Y = (GameWindow.HEIGHT / 2) - 50;
-    private int player1X = 10;
-    private int player2X = GameWindow.WIDTH - 45;
-    private int playersWidth = 20;
-    private int player1Height = 100;
-    private int player2Height = 100;
-    private double player2Y = (GameWindow.HEIGHT / 2) - 50;
-
-
-    private int buffer = 10;
-    private int intervalBetweenSpeedIncrease = 5000;
-    private int level = 1;
-    protected boolean isGameOver = false;
-    private int whoWon = 0;
 }

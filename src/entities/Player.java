@@ -4,14 +4,14 @@ import main.GameWindow;
 
 
 public class Player extends Entity {
-    private final String PLAYER_NAME;
+    private final int PLAYER_NUMBER;
     private boolean keyUp = false;
     private boolean keyDown = false;
 
 
-    public Player(int xPos, String name) {
+    public Player(int xPos, int playerNum) {
         super(xPos, (GameWindow.HEIGHT / 2) - 25, 20, 100);
-        this.PLAYER_NAME = name;
+        this.PLAYER_NUMBER = playerNum;
         this.yDir = 2;
     }
 
@@ -20,7 +20,11 @@ public class Player extends Entity {
     }
 
 
-    public void updatePosition() {
+    public void update() {
+        updatePlayer();
+    }
+
+    public void updatePlayer() {
         if (keyDown && yPos + height < GameWindow.HEIGHT - 50) {
             movePlayer(1);
         }
@@ -29,11 +33,14 @@ public class Player extends Entity {
         }
     }
 
+
     public void setKeyUp(boolean keyUp) {
         this.keyUp = keyUp;
     }
 
+
     public void setKeyDown(boolean keyDown) {
         this.keyDown = keyDown;
     }
+
 }

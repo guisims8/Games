@@ -3,6 +3,7 @@ package main;
 import entities.Cube;
 import entities.Player;
 import entities.Projectile;
+import music.Music;
 
 import java.awt.*;
 
@@ -26,8 +27,8 @@ public class Game implements Runnable {
         gamePanel = new GamePanel(this);
         gameWindow = new GameWindow(gamePanel);
         gamePanel.requestFocus();
-        this.player1 = new Player(10, "Player 1");
-        this.player2 = new Player(GameWindow.WIDTH - 45, "Player 2");
+        this.player1 = new Player(10, 1);
+        this.player2 = new Player(GameWindow.WIDTH - 45, 2);
         this.projectile = new Cube(100, 100, 2, 2);
         startGame();
     }
@@ -77,9 +78,9 @@ public class Game implements Runnable {
                         //runNyanCatMode();
                     }
                     if (gamePanel.isGameOver) {
-                 //       gamePanel.nyanMusic.kill();
-                   //     gamePanel.nyanMusic = new Music("resources/sounds/Nyan cat theme song (sped up).wav");
-                     //   gamePanel.nyanMusic.play();
+                        gamePanel.nyanMusic.kill();
+                        gamePanel.nyanMusic = new Music("resources/sounds/Nyan cat theme song (sped up).wav");
+                        gamePanel.nyanMusic.play();
                     }
                 }
                 updates++;
@@ -109,8 +110,8 @@ public class Game implements Runnable {
     }
 
     public void update() {
-        player1.updatePosition();
-        player2.updatePosition();
+        player1.update();
+        player2.update();
         projectile.updatePosition();
     }
 
@@ -128,7 +129,7 @@ public class Game implements Runnable {
 
     private void runNyanCatMode() {
         if (nyanCatCounter == 0) {
-          //  gamePanel.nyanMusic.play();
+            gamePanel.nyanMusic.play();
             setNyanCatDefenitions();
             System.out.println("--- NYAN ON ---");
             System.out.println();
@@ -137,7 +138,7 @@ public class Game implements Runnable {
         nyanCatCounter++;
         if (nyanCatCounter >= nyanCatTimer) {
             gamePanel.isNyanCat = false;
-          //  gamePanel.nyanMusic.stop();
+            gamePanel.nyanMusic.stop();
             nyanCatCounter = 0;
             setCubeDefenitions();
             System.out.println("--- NYAN OFF ------");
@@ -176,9 +177,5 @@ public class Game implements Runnable {
 
     public Player getPlayer2() {
         return player2;
-    }
-
-    public Projectile getProjectile() {
-        return projectile;
     }
 }

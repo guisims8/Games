@@ -1,7 +1,5 @@
 package entities;
 
-import main.GameWindow;
-
 import java.awt.*;
 
 public abstract class Entity {
@@ -19,8 +17,6 @@ public abstract class Entity {
         g.setColor(Color.WHITE);
         g.fillRect(xPos, yPos, width, height);
     }
-
-
 
     public double getYDir() {
         return yDir;

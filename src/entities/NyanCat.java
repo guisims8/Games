@@ -1,5 +1,7 @@
 package entities;
 
+import java.awt.*;
+
 public class NyanCat extends Entity implements Projectile {
 
 
@@ -10,5 +12,10 @@ public class NyanCat extends Entity implements Projectile {
     @Override
     public void updatePosition() {
 
+    }
+
+    @Override
+    public void renderProjectile(Graphics g) {
+        render(g);
     }
 }

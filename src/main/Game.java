@@ -1,33 +1,34 @@
 package main;
 
-import music.Music;
+import entities.Cube;
+import entities.Player;
+import entities.Projectile;
 
 import java.awt.*;
 
 public class Game implements Runnable {
     private final GameWindow gameWindow;
+    Player player1, player2;
     public static int score = 0;
     private final GamePanel gamePanel;
     private Thread gameLoop;
-    private int FPS_SET = 160;
-    protected static double p1speed = 3;
-    protected static double p2speed = 3;
-    private int nyanCatSpawnTimer = 800;
+    private int FPS_SET = 140;
+    private final int UPS_SET = 190;
+    private int nyanCatSpawnTimer = 900;
     private int nyanCatSpawnCounter = 0;
     private int nyanCatTimer = 600;
     private int nyanCatCounter = 0;
     private int levelTimer = 0;
     private int levelCounter = 0;
-    public static boolean leftPlayerKeyUp = false;
-    public static boolean rightPlayerKeyUp = false;
-    public static boolean leftPlayerKeyDown = false;
-    public static boolean rightPlayerKeyDown = false;
-
+    Projectile projectile;
 
     public Game() {
-        gamePanel = new GamePanel();
+        gamePanel = new GamePanel(this);
         gameWindow = new GameWindow(gamePanel);
         gamePanel.requestFocus();
+        this.player1 = new Player(10, "Player 1");
+        this.player2 = new Player(GameWindow.WIDTH - 45, "Player 2");
+        this.projectile = new Cube(100, 100, 2, 2);
         startGame();
     }
 
@@ -40,51 +41,85 @@ public class Game implements Runnable {
 
     @Override
     public void run() {
-
+        while (!gamePanel.enterKeyPressed) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
         double timePerFrame = 1000000000.0 / FPS_SET;
-        long lastFrame = System.nanoTime();
-        long now;
+        double timePerUpdate = 1000000000.0 / UPS_SET;
+        int frames = 0;
+        int updates = 0;
 
+        double deltaU = 0;
+        double deltaF = 0;
+
+        long previousTime = System.nanoTime();
+        long lastCheck = System.currentTimeMillis();
 
         while (true) {
-            while (!gamePanel.enterKeyPressed) {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            now = System.nanoTime();
-            if (now - lastFrame >= timePerFrame) {
-                lastFrame = now;
+
+            long currentTime = System.nanoTime();
+
+
+            deltaU += (currentTime - previousTime) / timePerUpdate;
+            deltaF += (currentTime - previousTime) / timePerFrame;
+            previousTime = currentTime;
+
+            if (deltaU >= 1) {
                 if (!gamePanel.isGameOver) {
-                    movePlayers();
-                    gamePanel.udpateProjectilePosition();
+                    update();
+                    //gamePanel.udpateProjectilePosition();
                     spawnNyanCat();
                     if (gamePanel.isNyanCat) {
-                        runNyanCatMode();
+                        //runNyanCatMode();
                     }
                     if (gamePanel.isGameOver) {
-                        gamePanel.nyanMusic.kill();
-                        gamePanel.nyanMusic = new Music("resources/sounds/Nyan cat theme song (sped up).wav");
-                        gamePanel.nyanMusic.play();
+                 //       gamePanel.nyanMusic.kill();
+                   //     gamePanel.nyanMusic = new Music("resources/sounds/Nyan cat theme song (sped up).wav");
+                     //   gamePanel.nyanMusic.play();
                     }
                 }
+                updates++;
+                deltaU--;
+            }
+            if (System.currentTimeMillis() - lastCheck >= 1000) {
+                lastCheck = System.currentTimeMillis();
+                System.out.println("FPS: " + frames + " | UPS: " + updates);
+                frames = 0;
+                updates = 0;
+
+            }
+            if (deltaF >= 1) {
                 gamePanel.repaint();
+                frames++;
+                deltaF--;
             }
 
 
         }
     }
 
-    private void render(Graphics g) {
-
+    public void render(Graphics g) {
+        player1.render(g);
+        player2.render(g);
+        projectile.renderProjectile(g);
     }
+
+    public void update() {
+        player1.updatePosition();
+        player2.updatePosition();
+        projectile.updatePosition();
+    }
+
 
     private void spawnNyanCat() {
         if (!gamePanel.isNyanCat) {
             nyanCatSpawnCounter++;
             if (nyanCatSpawnCounter >= nyanCatSpawnTimer) {
+                gamePanel.isGameOver = true;
                 gamePanel.isNyanCat = true;
                 nyanCatSpawnCounter = 0;
             }
@@ -93,7 +128,7 @@ public class Game implements Runnable {
 
     private void runNyanCatMode() {
         if (nyanCatCounter == 0) {
-            gamePanel.nyanMusic.play();
+          //  gamePanel.nyanMusic.play();
             setNyanCatDefenitions();
             System.out.println("--- NYAN ON ---");
             System.out.println();
@@ -102,7 +137,7 @@ public class Game implements Runnable {
         nyanCatCounter++;
         if (nyanCatCounter >= nyanCatTimer) {
             gamePanel.isNyanCat = false;
-            gamePanel.nyanMusic.stop();
+          //  gamePanel.nyanMusic.stop();
             nyanCatCounter = 0;
             setCubeDefenitions();
             System.out.println("--- NYAN OFF ------");
@@ -118,8 +153,8 @@ public class Game implements Runnable {
         gamePanel.xDir += 1.8 * Math.signum(gamePanel.xDir);
         gamePanel.yDir += 1.8 * Math.signum(gamePanel.yDir);
 
-        p1speed += 1.3;
-        p2speed += 1.3;
+        player1.yDir += 1.3;
+        player2.yDir += 1.3;
         gamePanel.animationTimer--;
     }
 
@@ -130,59 +165,20 @@ public class Game implements Runnable {
         gamePanel.xDir -= 1.8 * Math.signum(gamePanel.xDir);
         gamePanel.yDir -= 1.8 * Math.signum(gamePanel.yDir);
 
-        p1speed -= 1.3;
-        p2speed -= 1.3;
+        player1.yDir -= 1.3;
+        player2.yDir -= 1.3;
     }
 
-    private void nyanCatTimer() {
 
-
+    public Player getPlayer1() {
+        return player1;
     }
 
-    public void movePlayers() {
-        if (leftPlayerKeyDown && gamePanel.getPlayer1Y() + gamePanel.getPlayer1Height() < GameWindow.HEIGHT - 50) {
-            gamePanel.moveP1(p1speed);
-        }
-        if (leftPlayerKeyUp && gamePanel.getPlayer1Y() > 10) {
-            gamePanel.moveP1(-p1speed);
-        }
-        if (rightPlayerKeyDown && gamePanel.getPlayer2Y() + gamePanel.getPlayer2Height() < GameWindow.HEIGHT - 50) {
-            gamePanel.moveP2(p2speed);
-        }
-        if (rightPlayerKeyUp && gamePanel.getPlayer2Y() > 10) {
-            gamePanel.moveP2(-p2speed);
-        }
+    public Player getPlayer2() {
+        return player2;
     }
 
-    public static boolean isLeftPlayerKeyUp() {
-        return leftPlayerKeyUp;
-    }
-
-    public static void setLeftPlayerKeyUp(boolean leftPlayerKeyUp) {
-        Game.leftPlayerKeyUp = leftPlayerKeyUp;
-    }
-
-    public static boolean isRightPlayerKeyUp() {
-        return rightPlayerKeyUp;
-    }
-
-    public static void setRightPlayerKeyUp(boolean rightPlayerKeyUp) {
-        Game.rightPlayerKeyUp = rightPlayerKeyUp;
-    }
-
-    public static boolean isLeftPlayerKeyDown() {
-        return leftPlayerKeyDown;
-    }
-
-    public static void setLeftPlayerKeyDown(boolean leftPlayerKeyDown) {
-        Game.leftPlayerKeyDown = leftPlayerKeyDown;
-    }
-
-    public static boolean isRightPlayerKeyDown() {
-        return rightPlayerKeyDown;
-    }
-
-    public static void setRightPlayerKeyDown(boolean rightPlayerKeyDown) {
-        Game.rightPlayerKeyDown = rightPlayerKeyDown;
+    public Projectile getProjectile() {
+        return projectile;
     }
 }

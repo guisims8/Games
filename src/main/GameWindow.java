@@ -5,7 +5,8 @@ import java.awt.*;
 
 public class GameWindow {
     private JFrame jFrame;
-    public static final int WIDTH = 1300, HEIGHT = 800;
+    public static final int WIDTH = 1000
+            , HEIGHT = 700;
 
     public GameWindow(GamePanel gamePanel) {
         this.jFrame = new JFrame();

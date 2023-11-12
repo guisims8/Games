@@ -1,4 +1,4 @@
-package Display;
+package display;
 
 import main.Game;
 import main.GameWindow;

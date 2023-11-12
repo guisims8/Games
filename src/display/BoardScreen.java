@@ -16,6 +16,7 @@ public class BoardScreen {
             g.fillRect(GameWindow.WIDTH / 2, value, 10, 50);
             value += 81;
         }
+        System.out.println("hello");
         Font font = new Font("Arial", Font.BOLD, 20);
         g.setFont(font);
         g.setColor(Color.WHITE);

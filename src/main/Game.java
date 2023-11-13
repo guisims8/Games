@@ -1,6 +1,7 @@
 package main;
 
 import entities.Cube;
+import entities.NyanCat;
 import entities.Player;
 import entities.Projectile;
 import music.Music;
@@ -29,14 +30,14 @@ public class Game implements Runnable {
         gamePanel.requestFocus();
         this.player1 = new Player(10, 1);
         this.player2 = new Player(GameWindow.WIDTH - 45, 2);
-        this.projectile = new Cube(100, 100, 2, 2);
+        this.projectile = new NyanCat(100, 100, 115, 50);
         startGame();
     }
 
     public void startGame() {
         gameLoop = new Thread(this);
         gameLoop.start();
-        gamePanel.startSpeedTimer();
+       // gamePanel.startSpeedTimer();
 
     }
 
@@ -73,9 +74,9 @@ public class Game implements Runnable {
                 if (!gamePanel.isGameOver) {
                     update();
                     //gamePanel.udpateProjectilePosition();
-                    spawnNyanCat();
+                    //spawnNyanCat();
                     if (gamePanel.isNyanCat) {
-                        //runNyanCatMode();
+                      //  runNyanCatMode();
                     }
                     if (gamePanel.isGameOver) {
                         gamePanel.nyanMusic.kill();
@@ -110,9 +111,10 @@ public class Game implements Runnable {
     }
 
     public void update() {
+
         player1.update();
         player2.update();
-        projectile.updatePosition();
+        projectile.updatePosition(player1, player2);
     }
 
 
@@ -148,11 +150,11 @@ public class Game implements Runnable {
     }
 
     private void setNyanCatDefenitions() {
-        gamePanel.ballWidth = 115;
-        gamePanel.ballHeight = 45;
+      //  gamePanel.ballWidth = 115;
+       // gamePanel.ballHeight = 45;
 
-        gamePanel.xDir += 1.8 * Math.signum(gamePanel.xDir);
-        gamePanel.yDir += 1.8 * Math.signum(gamePanel.yDir);
+       // gamePanel.xDir += 1.8 * Math.signum(gamePanel.xDir);
+        //gamePanel.yDir += 1.8 * Math.signum(gamePanel.yDir);
 
         player1.yDir += 1.3;
         player2.yDir += 1.3;
@@ -160,11 +162,11 @@ public class Game implements Runnable {
     }
 
     private void setCubeDefenitions() {
-        gamePanel.ballWidth = 20;
-        gamePanel.ballHeight = 20;
+   //     gamePanel.ballWidth = 20;
+    //    gamePanel.ballHeight = 20;
 
-        gamePanel.xDir -= 1.8 * Math.signum(gamePanel.xDir);
-        gamePanel.yDir -= 1.8 * Math.signum(gamePanel.yDir);
+      //  gamePanel.xDir -= 1.8 * Math.signum(gamePanel.xDir);
+       // gamePanel.yDir -= 1.8 * Math.signum(gamePanel.yDir);
 
         player1.yDir -= 1.3;
         player2.yDir -= 1.3;

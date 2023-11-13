@@ -5,6 +5,8 @@ import main.GameWindow;
 
 public class Player extends Entity {
     private final int PLAYER_NUMBER;
+    protected int buffer = 10;
+
     private boolean keyUp = false;
     private boolean keyDown = false;
 
@@ -19,7 +21,6 @@ public class Player extends Entity {
         this.yPos += negative * yDir;
     }
 
-
     public void update() {
         updatePlayer();
     }
@@ -33,11 +34,9 @@ public class Player extends Entity {
         }
     }
 
-
     public void setKeyUp(boolean keyUp) {
         this.keyUp = keyUp;
     }
-
 
     public void setKeyDown(boolean keyDown) {
         this.keyDown = keyDown;

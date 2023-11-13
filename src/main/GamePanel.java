@@ -14,43 +14,14 @@ import java.io.File;
 import java.io.IOException;
 
 public class GamePanel extends JPanel implements Runnable {
-    private int ballX = 100, ballY = 100;
-    protected double xDir = 2, yDir = 2;
-    protected int ballWidth = 25;
-    protected int ballHeight = 25;
-    private boolean movingRight = true;
-    private Color ballColor = Color.WHITE;
-    private final Image[] rightSpriteImages = new Image[5];
-    private final Image[] leftSpriteImages = new Image[5];
-    private final Image[] endGameSpriteImages = new Image[5];
-    protected int indexToDraw, animationCounter = 0;
-    protected int animationTimer = 12;
-
-    protected boolean enterKeyPressed = false;
-    protected boolean isNyanCat = false;
-
-
-    private double player1Y = (GameWindow.HEIGHT / 2) - 50;
-    private int player1X = 10;
-    private int player2X = GameWindow.WIDTH - 45;
-    private int playersWidth = 20;
-    private int player1Height = 100;
-    private int player2Height = 100;
-    private double player2Y = (GameWindow.HEIGHT / 2) - 50;
-
-
-    private int buffer = 10;
     private int intervalBetweenSpeedIncrease = 5000;
     private int level = 1;
     protected boolean isGameOver = false;
     private int whoWon = 0;
 
-    Music pong;
     Game game;
     Music nyanMusic = new Music("resources/sounds/Nyan cat theme song (sped up).wav");
     ;
-    private String[] pongSounds;
-
 
     public GamePanel(Game game) {
         this.game = game;
@@ -60,13 +31,8 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void startSpeedTimer() {
-        //Thread speedIncreaseTimer = new Thread(this);
-        pongSounds = C4.NOTES;
-        //pong = new Music(pongSounds[0]);
-        pong = new Music(pongSounds[level]);
-        pong.play();
-        pong.kill();
-        //speedIncreaseTimer.start();
+        Thread speedIncreaseTimer = new Thread(this);
+        speedIncreaseTimer.start();
 
     }
 
@@ -79,9 +45,9 @@ public class GamePanel extends JPanel implements Runnable {
             updateAnimationTick();
             displayGameOverScreen(g);
         } else {
-            //updateAnimationTick();
-            displayBoard(g);
-            displayElements(g);
+           // updateAnimationTick();
+           displayBoard(g);
+           // displayElements(g);
             game.render(g);
         }
     }
@@ -99,24 +65,18 @@ public class GamePanel extends JPanel implements Runnable {
         g.setFont(font);
         g.setColor(Color.WHITE);
         g.drawString("Score : " + Game.score, 30, 30);
-        g.drawString("B speed : " + xDir, GameWindow.WIDTH - 140, 15);
+       // g.drawString("B speed : " + xDir, GameWindow.WIDTH - 140, 15);
         g.drawString("P speed : " + game.getPlayer1().getYDir(), GameWindow.WIDTH - 140, 35);
 
 
     }
 
     private void displayElements(Graphics g) {
-        // g.fillRect(player1X, (int) player1Y, playersWidth, player1Height);
-        //g.fillRect(player2X, (int) player2Y, playersWidth, player2Height);
+       //  g.fillRect(player1X, (int) player1Y, playersWidth, player1Height);
+       // g.fillRect(player2X, (int) player2Y, playersWidth, player2Height);
         if (!isNyanCat) {
-           // g.setColor(ballColor);
-            //g.fillRect(ballX, ballY, ballWidth, ballHeight);
         } else {
-            if (movingRight)
                 //g.drawImage(endGameSpriteImages[indexToDraw], ballX, ballY, null);
-                g.drawImage(rightSpriteImages[indexToDraw], ballX, ballY, null);
-            else
-                g.drawImage(leftSpriteImages[indexToDraw], ballX, ballY, null);
         }
     }
 
@@ -145,49 +105,29 @@ public class GamePanel extends JPanel implements Runnable {
 
 
 
-    public void udpateProjectilePosition() {
-        ballY += yDir;
-        if (ballY + ballHeight + 40 > GameWindow.HEIGHT || ballY < 0) {
-            yDir *= -1;
-            pong = new Music(pongSounds[level]);
-            pong.play();
-            pong.kill();
-            ballColor = getRandomColor();
-        }
-        detectPlayerTouch();
-        if (ballX + ballWidth > GameWindow.WIDTH - 15) {
-            whoWon = 1;
-            isGameOver = true;
-            animationTimer = 1;
-        }
-        if (ballX < 14) {
-            whoWon = 2;
-            isGameOver = true;
-            animationTimer = 1;
-        }
-    }
-    public void changeDirection(boolean movingRight) {
-        xDir *= -1;
-        Game.score++;
-        ballColor = getRandomColor();
-        this.movingRight = movingRight;
-        pong = new Music(pongSounds[level]);
-        pong.play();
-        pong.kill();
-    }
-    public void detectPlayerTouch() {
-        ballX += xDir;
-        if (ballX < player1X + 10 + buffer && ballY + ballHeight > player1Y - buffer && ballY < player1Y + player1Height + buffer) {
-            if (!movingRight) {
-                changeDirection(true);
-            }
-        }
-        if (ballX + ballWidth > player2X - buffer && ballY + ballHeight > player2Y - buffer && ballY < player2Y + player2Height + buffer) {
-            if (movingRight) {
-                changeDirection(false);
-            }
-        }
-    }
+
+
+
+    private final Image[] rightSpriteImages = new Image[5];
+    private final Image[] leftSpriteImages = new Image[5];
+    private final Image[] endGameSpriteImages = new Image[5];
+    protected int indexToDraw, animationCounter = 0;
+    protected int animationTimer = 12;
+
+    protected boolean enterKeyPressed = false;
+    protected boolean isNyanCat = false;
+
+
+    private double player1Y = (GameWindow.HEIGHT / 2) - 50;
+    private int player1X = 10;
+    private int player2X = GameWindow.WIDTH - 45;
+    private int playersWidth = 20;
+    private int player1Height = 100;
+    private int player2Height = 100;
+    private double player2Y = (GameWindow.HEIGHT / 2) - 50;
+
+
+    private int buffer = 10;
     private void updateAnimationTick() {
         animationCounter++;
         if (animationCounter >= animationTimer) {
@@ -210,13 +150,13 @@ public class GamePanel extends JPanel implements Runnable {
             //yDir += 0.3 * Math.signum(yDir);
             level++;
 
-            game.getPlayer1().yDir += 0.3;
-            game.getPlayer2().yDir += 0.3;
+            //game.getPlayer1().yDir += 0.3;
+            //game.getPlayer2().yDir += 0.3;
 
             //Game.p1speed += 0.3;
             //Game.p2speed += 0.3;
             System.out.println("LEVEL INCREASE-------");
-            System.out.println(xDir + " " + yDir);
+           // System.out.println(xDir + " " + yDir);
             System.out.println("player speed : " + game.getPlayer1().getYDir());
             System.out.println("Level : " + level);
             System.out.println();

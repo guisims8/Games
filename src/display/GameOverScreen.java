@@ -1,7 +1,6 @@
 package display;
 
 import main.Game;
-import main.GameWindow;
 import sprites.SpritePath;
 
 import javax.imageio.ImageIO;

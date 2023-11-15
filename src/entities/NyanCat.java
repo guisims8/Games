@@ -1,6 +1,5 @@
 package entities;
 
-import main.GameWindow;
 import sprites.SpritePath;
 
 import javax.imageio.ImageIO;
@@ -14,24 +13,22 @@ public class NyanCat extends Projectile {
     private final Image[] rightSpriteImages = new Image[5];
     protected int indexToDraw, animationCounter = 0;
     protected int animationTimer = 12;
-    private int nyanCatSpawnTimer = 900;
-    private int nyanCatSpawnCounter = 0;
-    private int nyanCatTimer = 600;
-    private int nyanCatCounter = 0;
 
 
-    public NyanCat(int xPos, int yPos, int width,int height) {
-        super(xPos, yPos, width, height);
+    public NyanCat(double xPos, double yPos, double xDir, double yDir, boolean isMovingRight) {
+        super(xPos, yPos, 115, 45, isMovingRight);
         importRightSpriteImages();
         importLeftSpriteImages();
-        this.xDir = 2;
-        this.yDir = 2;
+        this.xDir = xDir;
+        this.yDir = yDir;
     }
 
     @Override
     public void renderProjectile(Graphics g) {
-        super.render(g);
-        //g.drawImage(rightSpriteImages[0], xPos, yPos, null);
+        //super.render(g);
+        updateAnimationTick();
+        if (isMovingRight) g.drawImage(rightSpriteImages[indexToDraw], (int) xPos, (int) yPos, null);
+        else g.drawImage(leftSpriteImages[indexToDraw], (int) xPos, (int) yPos, null);
     }
 
     private void updateAnimationTick() {
@@ -44,8 +41,6 @@ public class NyanCat extends Projectile {
             }
         }
     }
-
-
 
 
     private void importRightSpriteImages() {

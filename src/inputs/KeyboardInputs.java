@@ -4,8 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import entities.Player;
-import main.Game;
-import main.GamePanel;
+import display.GamePanel;
 
 
 

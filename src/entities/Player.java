@@ -1,6 +1,6 @@
 package entities;
 
-import main.GameWindow;
+import display.GameWindow;
 
 
 public class Player extends Entity {
@@ -8,6 +8,7 @@ public class Player extends Entity {
     protected int buffer = 10;
     private boolean keyUp = false;
     private boolean keyDown = false;
+    protected boolean invertedControls = false;
     public static boolean keyEnter = false;
 
 
@@ -26,11 +27,20 @@ public class Player extends Entity {
     }
 
     public void updatePlayer() {
-        if (keyDown && yPos + height < GameWindow.HEIGHT - 50) {
-            movePlayer(1);
-        }
-        if (keyUp && yPos > 10) {
-            movePlayer(-1);
+        if (!invertedControls) {
+            if (keyDown && yPos + height < GameWindow.HEIGHT - 50) {
+                movePlayer(1);
+            }
+            if (keyUp && yPos > 10) {
+                movePlayer(-1);
+            }
+        } else {
+            if (keyUp && yPos + height < GameWindow.HEIGHT - 50) {
+                movePlayer(1);
+            }
+            if (keyDown && yPos > 10) {
+                movePlayer(-1);
+            }
         }
     }
 

@@ -1,10 +1,10 @@
 package main;
 
+import display.GamePanel;
+import display.GameWindow;
 import entities.Cube;
-import entities.NyanCat;
 import entities.Player;
 import entities.Projectile;
-import music.Music;
 
 import java.awt.*;
 
@@ -15,6 +15,7 @@ public class Game implements Runnable {
     private int FPS_SET = 140;
     private final int UPS_SET = 190;
 
+    GameModeManager gameModeManager;
     Player player1, player2;
     Projectile projectile;
     public boolean isGameOver = false;
@@ -23,13 +24,14 @@ public class Game implements Runnable {
 
 
     public Game() {
-        this.projectile = new NyanCat(100, 100, 115, 50);
+        this.projectile = new Cube(100, 105,1.5,1.5,true);
         this.player1 = new Player(10, 1);
         this.player2 = new Player(GameWindow.WIDTH - 45, 2);
         gamePanel = new GamePanel(this);
         gameWindow = new GameWindow(gamePanel);
         gamePanel.requestFocus();
-        startGame();
+        gameModeManager = new GameModeManager(this);
+
     }
 
     public void startGame() {
@@ -59,23 +61,20 @@ public class Game implements Runnable {
         long lastCheck = System.currentTimeMillis();
 
         while (true) {
-
             long currentTime = System.nanoTime();
-
 
             deltaU += (currentTime - previousTime) / timePerUpdate;
             deltaF += (currentTime - previousTime) / timePerFrame;
             previousTime = currentTime;
 
-
-
+            // Update Game
             if (deltaU >= 1) {
                 if (!isGameOver) {
                     update();
                 } else {
-                    gamePanel.nyanMusic.kill();
-                    gamePanel.nyanMusic = new Music("resources/sounds/Nyan cat theme song (sped up).wav");
-                    gamePanel.nyanMusic.play();
+                   // gamePanel.nyanMusic.kill();
+                   // gamePanel.nyanMusic = new Music("resources/sounds/Nyan cat theme song (sped up).wav");
+                    //gamePanel.nyanMusic.play();
                 }
                 updates++;
                 deltaU--;
@@ -88,6 +87,8 @@ public class Game implements Runnable {
                 updates = 0;
 
             }
+
+            // Update Screen
             if (deltaF >= 1) {
                 gamePanel.repaint();
                 frames++;
@@ -106,6 +107,7 @@ public class Game implements Runnable {
         player1.update();
         player2.update();
         projectile.updatePosition(player1, player2);
+        gameModeManager.spawnNyanCat(projectile);
     }
 
 

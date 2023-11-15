@@ -1,9 +1,6 @@
 package display;
 
-import entities.Cube;
-import entities.Projectile;
 import main.Game;
-import main.GameWindow;
 
 import java.awt.*;
 
@@ -21,7 +18,7 @@ public class BoardScreen {
         g.setColor(Color.WHITE);
         g.drawString("Score : " + Game.score, 30, 30);
       //  g.drawString("B speed : " + ((Projectile)game.getProjectile()).xDir, GameWindow.WIDTH - 140, 15);
-        g.drawString("P speed : " + game.getPlayer1().getYDir(), GameWindow.WIDTH - 140, 35);
+       // g.drawString("P speed : " + game.getPlayer1().getYDir(), GameWindow.WIDTH - 140, 35);
 
 
     }

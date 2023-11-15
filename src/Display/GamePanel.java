@@ -1,8 +1,9 @@
-package main;
+package display;
 
 import display.BoardScreen;
 import display.GameOverScreen;
 import inputs.KeyboardInputs;
+import main.Game;
 import music.Music;
 
 import javax.swing.*;
@@ -11,7 +12,6 @@ import java.awt.*;
 
 public class GamePanel extends JPanel {
     Game game;
-    Music nyanMusic = new Music("resources/sounds/Nyan cat theme song (sped up).wav");
 
     public GamePanel(Game game) {
         this.game = game;

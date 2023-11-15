@@ -3,6 +3,7 @@ package inputs;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import entities.Player;
 import main.Game;
 import main.GamePanel;
 
@@ -27,7 +28,7 @@ public class KeyboardInputs implements KeyListener {
             case KeyEvent.VK_S -> gamePanel.getGame().getPlayer1().setKeyDown(true);
             case KeyEvent.VK_UP -> gamePanel.getGame().getPlayer2().setKeyUp(true);
             case KeyEvent.VK_DOWN -> gamePanel.getGame().getPlayer2().setKeyDown(true);
-            case KeyEvent.VK_ENTER -> gamePanel.setEnterKeyPressed(true);
+            case KeyEvent.VK_ENTER -> Player.setKeyEnter(true);
         }
     }
 
@@ -38,6 +39,7 @@ public class KeyboardInputs implements KeyListener {
             case KeyEvent.VK_S -> gamePanel.getGame().getPlayer1().setKeyDown(false);
             case KeyEvent.VK_UP -> gamePanel.getGame().getPlayer2().setKeyUp(false);
             case KeyEvent.VK_DOWN -> gamePanel.getGame().getPlayer2().setKeyDown(false);
+            case KeyEvent.VK_ENTER -> Player.setKeyEnter(false);
         }
     }
 }

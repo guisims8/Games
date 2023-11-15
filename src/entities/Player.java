@@ -6,9 +6,9 @@ import main.GameWindow;
 public class Player extends Entity {
     private final int PLAYER_NUMBER;
     protected int buffer = 10;
-
     private boolean keyUp = false;
     private boolean keyDown = false;
+    public static boolean keyEnter = false;
 
 
     public Player(int xPos, int playerNum) {
@@ -42,4 +42,7 @@ public class Player extends Entity {
         this.keyDown = keyDown;
     }
 
+    public static void setKeyEnter(boolean keyEnter) {
+        Player.keyEnter = keyEnter;
+    }
 }

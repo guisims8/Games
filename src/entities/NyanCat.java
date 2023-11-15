@@ -12,6 +12,12 @@ import java.io.IOException;
 public class NyanCat extends Projectile {
     private final Image[] leftSpriteImages = new Image[5];
     private final Image[] rightSpriteImages = new Image[5];
+    protected int indexToDraw, animationCounter = 0;
+    protected int animationTimer = 12;
+    private int nyanCatSpawnTimer = 900;
+    private int nyanCatSpawnCounter = 0;
+    private int nyanCatTimer = 600;
+    private int nyanCatCounter = 0;
 
 
     public NyanCat(int xPos, int yPos, int width,int height) {
@@ -22,13 +28,24 @@ public class NyanCat extends Projectile {
         this.yDir = 2;
     }
 
-
     @Override
     public void renderProjectile(Graphics g) {
         super.render(g);
         //g.drawImage(rightSpriteImages[0], xPos, yPos, null);
-
     }
+
+    private void updateAnimationTick() {
+        animationCounter++;
+        if (animationCounter >= animationTimer) {
+            animationCounter = 0;
+            indexToDraw++;
+            if (indexToDraw == rightSpriteImages.length) {
+                indexToDraw = 0;
+            }
+        }
+    }
+
+
 
 
     private void importRightSpriteImages() {

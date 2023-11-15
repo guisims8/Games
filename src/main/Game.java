@@ -10,40 +10,37 @@ import java.awt.*;
 
 public class Game implements Runnable {
     private final GameWindow gameWindow;
-    Player player1, player2;
-    public static int score = 0;
     private final GamePanel gamePanel;
     private Thread gameLoop;
     private int FPS_SET = 140;
     private final int UPS_SET = 190;
-    private int nyanCatSpawnTimer = 900;
-    private int nyanCatSpawnCounter = 0;
-    private int nyanCatTimer = 600;
-    private int nyanCatCounter = 0;
-    private int levelTimer = 0;
-    private int levelCounter = 0;
+
+    Player player1, player2;
     Projectile projectile;
+    public boolean isGameOver = false;
+    public static int score = 0;
+
+
 
     public Game() {
+        this.projectile = new NyanCat(100, 100, 115, 50);
+        this.player1 = new Player(10, 1);
+        this.player2 = new Player(GameWindow.WIDTH - 45, 2);
         gamePanel = new GamePanel(this);
         gameWindow = new GameWindow(gamePanel);
         gamePanel.requestFocus();
-        this.player1 = new Player(10, 1);
-        this.player2 = new Player(GameWindow.WIDTH - 45, 2);
-        this.projectile = new NyanCat(100, 100, 115, 50);
         startGame();
     }
 
     public void startGame() {
         gameLoop = new Thread(this);
         gameLoop.start();
-       // gamePanel.startSpeedTimer();
 
     }
 
     @Override
     public void run() {
-        while (!gamePanel.enterKeyPressed) {
+        while (!Player.keyEnter) {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -70,23 +67,20 @@ public class Game implements Runnable {
             deltaF += (currentTime - previousTime) / timePerFrame;
             previousTime = currentTime;
 
+
+
             if (deltaU >= 1) {
-                if (!gamePanel.isGameOver) {
+                if (!isGameOver) {
                     update();
-                    //gamePanel.udpateProjectilePosition();
-                    //spawnNyanCat();
-                    if (gamePanel.isNyanCat) {
-                      //  runNyanCatMode();
-                    }
-                    if (gamePanel.isGameOver) {
-                        gamePanel.nyanMusic.kill();
-                        gamePanel.nyanMusic = new Music("resources/sounds/Nyan cat theme song (sped up).wav");
-                        gamePanel.nyanMusic.play();
-                    }
+                } else {
+                    gamePanel.nyanMusic.kill();
+                    gamePanel.nyanMusic = new Music("resources/sounds/Nyan cat theme song (sped up).wav");
+                    gamePanel.nyanMusic.play();
                 }
                 updates++;
                 deltaU--;
             }
+
             if (System.currentTimeMillis() - lastCheck >= 1000) {
                 lastCheck = System.currentTimeMillis();
                 System.out.println("FPS: " + frames + " | UPS: " + updates);
@@ -99,8 +93,6 @@ public class Game implements Runnable {
                 frames++;
                 deltaF--;
             }
-
-
         }
     }
 
@@ -111,65 +103,9 @@ public class Game implements Runnable {
     }
 
     public void update() {
-
         player1.update();
         player2.update();
         projectile.updatePosition(player1, player2);
-    }
-
-
-    private void spawnNyanCat() {
-        if (!gamePanel.isNyanCat) {
-            nyanCatSpawnCounter++;
-            if (nyanCatSpawnCounter >= nyanCatSpawnTimer) {
-                gamePanel.isGameOver = true;
-                gamePanel.isNyanCat = true;
-                nyanCatSpawnCounter = 0;
-            }
-        }
-    }
-
-    private void runNyanCatMode() {
-        if (nyanCatCounter == 0) {
-            gamePanel.nyanMusic.play();
-            setNyanCatDefenitions();
-            System.out.println("--- NYAN ON ---");
-            System.out.println();
-
-        }
-        nyanCatCounter++;
-        if (nyanCatCounter >= nyanCatTimer) {
-            gamePanel.isNyanCat = false;
-            gamePanel.nyanMusic.stop();
-            nyanCatCounter = 0;
-            setCubeDefenitions();
-            System.out.println("--- NYAN OFF ------");
-            System.out.println();
-
-        }
-    }
-
-    private void setNyanCatDefenitions() {
-      //  gamePanel.ballWidth = 115;
-       // gamePanel.ballHeight = 45;
-
-       // gamePanel.xDir += 1.8 * Math.signum(gamePanel.xDir);
-        //gamePanel.yDir += 1.8 * Math.signum(gamePanel.yDir);
-
-        player1.yDir += 1.3;
-        player2.yDir += 1.3;
-        gamePanel.animationTimer--;
-    }
-
-    private void setCubeDefenitions() {
-   //     gamePanel.ballWidth = 20;
-    //    gamePanel.ballHeight = 20;
-
-      //  gamePanel.xDir -= 1.8 * Math.signum(gamePanel.xDir);
-       // gamePanel.yDir -= 1.8 * Math.signum(gamePanel.yDir);
-
-        player1.yDir -= 1.3;
-        player2.yDir -= 1.3;
     }
 
 

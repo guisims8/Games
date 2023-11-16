@@ -1,11 +1,11 @@
-package game.controller;
+package game.display;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GameWindow {
     private JFrame jFrame;
-    public static final int WIDTH = 1300, HEIGHT = 800;
+    public static final int WIDTH = 900, HEIGHT = 600;
 
     public GameWindow(GamePanel gamePanel) {
         this.jFrame = new JFrame();
@@ -17,7 +17,7 @@ public class GameWindow {
         jFrame.add(gamePanel);
     }
 
-    public void gameOver(JLabel gameoverLabel){
+    public void gameOver(JLabel gameoverLabel) {
         jFrame.add(gameoverLabel);
     }
 }

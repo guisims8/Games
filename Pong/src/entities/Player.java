@@ -1,6 +1,6 @@
-package entities;
+package game.entities;
 
-import main.GameWindow;
+import game.controller.GameWindow;
 
 public class Player extends Entity {
     private int speed = 7;

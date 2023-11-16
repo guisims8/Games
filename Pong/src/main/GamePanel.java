@@ -1,9 +1,9 @@
-package main;
+package game.controller;
 
-import inputs.KeyboardInputs;
-import music.C4;
-import music.Music;
-import sprites.SpritePath;
+import game.inputs.KeyboardInputs;
+import resources.music.C4;
+import resources.music.Music;
+import resources.sprites.SpritePath;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

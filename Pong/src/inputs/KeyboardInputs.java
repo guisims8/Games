@@ -1,10 +1,10 @@
-package inputs;
+package game.inputs;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import main.Game;
-import main.GamePanel;
+import game.controller.Game;
+import game.controller.GamePanel;
 
 
 

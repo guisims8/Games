@@ -1,6 +1,6 @@
-package main;
+package game.controller;
 
-import music.Music;
+import resources.music.Music;
 
 import java.awt.*;
 
